@@ -1,14 +1,16 @@
 FROM php:5.6-apache
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     imagemagick \
     libav-tools \
     libpng12-dev \
     libxslt-dev \
     mysql-client \
+    pwgen \
     unzip \
-    zip
+    zip \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install \
     gd \
@@ -44,15 +46,8 @@ COPY install-ilias /usr/local/bin/
 ENTRYPOINT ["docker-ilias-entrypoint"]
 CMD ["apache2-foreground"]
 
-ARG ILIAS_MAX_UPLOAD_SIZE=200M
-
-RUN echo "upload_max_filesize = ${ILIAS_MAX_UPLOAD_SIZE}\n\
-post_max_size = ${ILIAS_MAX_UPLOAD_SIZE}\n\
-error_reporting = E_ALL & ~E_NOTICE & ~E_WARNING & ~E_DEPRECATED & ~E_STRICT" \
-> /usr/local/etc/php/conf.d/ilias.ini
-
-ENV ILIAS_VERSION=5.1.27
-ENV ILIAS_SHA1=ebeeb974a932e00c696b9ecbf8715a6f8fa17a6e
+ENV ILIAS_VERSION=5.1.28
+ENV ILIAS_SHA1=20a99f8a44dba773fbc008f7585ac75fe3eb14b3
 
 RUN curl -o ilias.tar.gz -SL https://github.com/ILIAS-eLearning/ILIAS/archive/v${ILIAS_VERSION}.tar.gz \
     && echo "$ILIAS_SHA1 *ilias.tar.gz" | sha1sum -c - \
