@@ -19,12 +19,16 @@ RUN docker-php-ext-install \
     pdo_mysql \
     soap \
     xsl \
-    zip
+    zip \
+    sockets
 
 RUN a2enmod \
     expires \
     headers \
-    rewrite
+    rewrite \
+    ssl
+
+EXPOSE 80 443
 
 ENV ILIAS_WWW_PATH=/var/www/html
 ENV ILIAS_DATA_PATH=/var/www/html/data
