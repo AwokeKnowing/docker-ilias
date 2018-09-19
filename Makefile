@@ -1,4 +1,4 @@
-IMAGE = sturai/ilias
+IMAGE = awokeknowing/ilias
 
 variants = $(sort $(wildcard */*/Dockerfile))
 variant  = $$(basename $$(dirname $1))
